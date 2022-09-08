@@ -2,7 +2,6 @@ use std::cmp::max;
 use std::cmp::min;
 use std::env;
 use std::fs;
-use std::mem::replace;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -18,7 +17,7 @@ fn main() {
 fn imprimir_tablero(tablero : &Vec::<Vec::<String>>) {
     for fila in tablero {
         for columna in fila {
-            print!("{}", columna)
+            print!("{} ", columna)
         }
         println!()
     }
@@ -38,22 +37,22 @@ fn buscar_minas_adyacentes(buscaminas : &mut Vec::<Vec::<String>>) -> &mut Vec::
 }
 
 fn incrementar_adyacentes(buscaminas : &mut Vec::<Vec::<String>>, fila : usize, columna : usize) {
+    // Casteo a isize porque las restas pueden dar -1
     let fila_desde = max(0, fila as isize - 1) as usize;
-    let fila_hasta = min(buscaminas.len(), fila + 1);
+    let fila_hasta = min(buscaminas.len() - 1, fila + 1) + 1;
     let columna_desde = max(0, columna as isize - 1) as usize;
-    let columna_hasta = min(buscaminas[0].len(), columna + 1);
+    let columna_hasta = min(buscaminas[fila].len() - 1, columna + 1) + 1;
     // Recorro el cuadrado que redodea la mina, cuidadosamente de no salir de los límites
     for f in fila_desde..fila_hasta {
         for c in columna_desde..columna_hasta {
             let casilla = buscaminas.get_mut(f).unwrap().get_mut(c).unwrap();
             if *casilla != "*".to_string() {
-                if *casilla == ".".to_string() { //Inicializar casillas adyacentes
+                if *casilla == ".".to_string() { //Inicializar casillas adyacentes aún no inicializadas
                     *casilla = "0".to_string();
                 }
-                let mut pos_int : i64 = casilla.parse().unwrap();
-                pos_int = pos_int + 1;
-                *casilla = pos_int.to_string();
-                //replace(casilla, pos_int.to_string());
+                let mut casilla_int : usize = casilla.parse().unwrap();
+                casilla_int = casilla_int + 1;
+                *casilla = casilla_int.to_string();
             }
         }
     }
