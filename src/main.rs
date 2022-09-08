@@ -26,8 +26,8 @@ fn imprimir_tablero(tablero : &Vec::<Vec::<String>>) {
 fn buscar_minas_adyacentes(buscaminas : &mut Vec::<Vec::<String>>) -> &mut Vec::<Vec::<String>> {
     let fila_size = buscaminas.len();
     let columna_size = buscaminas[0].len();
-    for fila in 0..(fila_size - 1) {
-        for columna in 0..(columna_size) {
+    for fila in 0..fila_size {
+        for columna in 0..columna_size {
             if buscaminas[fila][columna] == "*" {
                 incrementar_adyacentes(buscaminas, fila, columna);
             }
